@@ -32,28 +32,31 @@ def tensor_to_pil(tensor):
 def index():
     return jsonify({"message": "Welcome to the watermark API!"})
 
-@app.route('/apply_watermark', methods=['POST'])
+@app.route('/apply_watermark', methods=['GET', 'POST'])
 def apply_watermark():
-    if 'image' not in request.files:
-        return jsonify({'error': 'No image file provided'}), 400
-    
-    image_file = request.files['image']
-    
-    try:
-        image = Image.open(image_file)
-        image_tensor = process_image(image)
+    if request.method == 'GET':
+        return jsonify({'message': 'This endpoint requires a POST request with an image file.'})
+    elif request.method == 'POST':
+        if 'image' not in request.files:
+            return jsonify({'error': 'No image file provided'}), 400
         
-        perturbed_image_tensor = apply_noise(image_tensor)
-        perturbed_image = tensor_to_pil(perturbed_image_tensor)
+        image_file = request.files['image']
         
-        output = io.BytesIO()
-        perturbed_image.save(output, format='JPEG')
-        output.seek(0)
-        
-        return send_file(output, mimetype='image/jpeg')
-    except Exception as e:
-        print(f"Error occurred: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        try:
+            image = Image.open(image_file)
+            image_tensor = process_image(image)
+            
+            perturbed_image_tensor = apply_noise(image_tensor)
+            perturbed_image = tensor_to_pil(perturbed_image_tensor)
+            
+            output = io.BytesIO()
+            perturbed_image.save(output, format='JPEG')
+            output.seek(0)
+            
+            return send_file(output, mimetype='image/jpeg')
+        except Exception as e:
+            print(f"Error occurred: {str(e)}")
+            return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
