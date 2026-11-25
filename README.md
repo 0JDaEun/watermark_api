@@ -1,3 +1,5 @@
+![Watermark API — project overview](docs/images/project-cover.svg)
+
 # Watermark API
 
 **이미지 노이즈 적용과 워터마크 검출을 탐색하는 이미지 처리 연구 프로토타입**
