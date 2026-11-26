@@ -1,0 +1,16 @@
+
+# Local dependencies, secrets and generated files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.jks
+*.keystore
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+.DS_Store
+.vs/
